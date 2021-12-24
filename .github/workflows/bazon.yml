@@ -1,0 +1,24 @@
+name: Update on schedule
+# Uncomment next to test manually
+#on: workflow_dispatch
+
+# Comment next block to test manually
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  ’50 */1 * * *'
+
+jobs:
+  resources:
+    name: Update resources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch resources
+        run: wget ${{ secrets.PLUGIN_URL }} -O online.js
+
+      - name: Update resources
+        uses: test-room-7/action-update-file@v1
+        with:
+            file-path: online.js
+            commit-msg: Update resources
+            github-token: ${{ secrets.GITHUB_TOKEN }}
